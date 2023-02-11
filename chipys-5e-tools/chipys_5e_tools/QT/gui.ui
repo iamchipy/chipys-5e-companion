@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>267</height>
+    <width>517</width>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="statusTip">
+    <string comment="Chipy's 5e Dice Simulator"/>
+   </property>
+   <property name="whatsThis">
+    <string comment="Chipy's 5e Dice Simulator"/>
+   </property>
    <widget class="QCheckBox" name="flag_adv">
     <property name="enabled">
      <bool>true</bool>
@@ -30,7 +36,7 @@
      <string>Advantage</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="flag_pam">
+   <widget class="QCheckBox" name="flag_gwm">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -49,9 +55,9 @@
    <widget class="QPushButton" name="roll_active">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>200</y>
-      <width>71</width>
+      <x>210</x>
+      <y>170</y>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -78,6 +84,15 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="minimum">
+     <number>-1</number>
+    </property>
+    <property name="maximum">
+     <number>35</number>
+    </property>
+    <property name="value">
+     <number>10</number>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="enabled">
@@ -98,8 +113,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>170</y>
+      <x>130</x>
+      <y>180</y>
       <width>98</width>
       <height>20</height>
      </rect>
@@ -191,9 +206,9 @@
    <widget class="QLineEdit" name="attack_formula">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>170</y>
-      <width>120</width>
+      <x>130</x>
+      <y>210</y>
+      <width>161</width>
       <height>20</height>
      </rect>
     </property>
@@ -220,9 +235,9 @@
    <widget class="QLineEdit" name="result">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>170</y>
-      <width>151</width>
+      <x>300</x>
+      <y>180</y>
+      <width>121</width>
       <height>51</height>
      </rect>
     </property>
@@ -244,30 +259,17 @@
    <widget class="QListView" name="dice_log">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>300</x>
       <y>10</y>
-      <width>151</width>
+      <width>211</width>
       <height>151</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>200</y>
-      <width>68</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Last Roll:</string>
     </property>
    </widget>
    <widget class="QListView" name="formula_log">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>140</x>
       <y>10</y>
       <width>151</width>
       <height>151</height>
@@ -295,8 +297,58 @@
      <string>Simlulate</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="hit_chance">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>180</y>
+      <width>81</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Rubik SemiBold</family>
+      <pointsize>36</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>##</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>160</y>
+      <width>98</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Last roll:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>160</y>
+      <width>98</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hit Rate: </string>
+    </property>
+   </widget>
    <zorder>flag_adv</zorder>
-   <zorder>flag_pam</zorder>
+   <zorder>flag_gwm</zorder>
    <zorder>armor_class</zorder>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
@@ -309,17 +361,19 @@
    <zorder>flag_ela</zorder>
    <zorder>result</zorder>
    <zorder>dice_log</zorder>
-   <zorder>label_4</zorder>
    <zorder>formula_log</zorder>
    <zorder>roll_active</zorder>
    <zorder>simulate</zorder>
+   <zorder>hit_chance</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>516</width>
+     <width>517</width>
      <height>21</height>
     </rect>
    </property>
@@ -329,7 +383,7 @@
     </property>
     <addaction name="actionHit_Chance"/>
     <addaction name="separator"/>
-    <addaction name="actionE_xit"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -339,6 +393,9 @@
     <addaction name="actionChipy_Dev"/>
    </widget>
    <widget class="QMenu" name="menuConfigurations">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Configurations</string>
     </property>
@@ -353,7 +410,7 @@
     <string>Hit Chance</string>
    </property>
   </action>
-  <action name="actionE_xit">
+  <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
