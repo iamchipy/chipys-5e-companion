@@ -45,12 +45,10 @@ class Dice:
 
                 # all of these are only being applied to the first dice in the formula and only once 
                 if not adv_rolled:
-                    print("i",int_value)
                     i, s = self.roll(element, flag_adv=flag_adv, flag_dis=flag_dis, flag_ins=flag_ins, flag_ela=flag_ela)
                     dice_report += str(s)
                     int_value += i
                     adv_rolled = True
-                    print("i",int_value, i)
                 else:
                     i, s = self.roll(element)
                     dice_report += str(s)
@@ -119,15 +117,12 @@ class Dice:
                             dice_rolls.sort()
                             kept_rolls = dice_rolls[2:]
                         else:
-                            print("pre", dice_rolls)
                             # sort and keep best per normal adv
                             dice_rolls.sort()
                             kept_rolls = dice_rolls[1:]
-                            
                     else:
                         dice_rolls.sort()
-                        kept_rolls = dice_rolls[:1]     
-                    print("post", kept_rolls)      
+                        kept_rolls = dice_rolls[:1]      
 
         return sum(kept_rolls), dice_rolls
 

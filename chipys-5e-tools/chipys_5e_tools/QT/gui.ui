@@ -93,6 +93,9 @@
     <property name="toolTip">
      <string>Select Armor class (or leave on '-1' to simular for all classes)</string>
     </property>
+    <property name="statusTip">
+     <string>Select Armor class (or leave on '-1' to simular for all classes)</string>
+    </property>
     <property name="minimum">
      <number>-1</number>
     </property>
@@ -181,6 +184,9 @@
       <width>101</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="statusTip">
+     <string>Number of dice roll attempts to simulate</string>
     </property>
     <property name="text">
      <string>9001</string>
@@ -273,6 +279,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="statusTip">
+     <string>Final value of the last roll</string>
+    </property>
     <property name="text">
      <string>###</string>
     </property>
@@ -289,6 +298,9 @@
       <height>151</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Quick load formula from recent rolls</string>
+    </property>
    </widget>
    <widget class="QListView" name="formula_log">
     <property name="geometry">
@@ -300,7 +312,7 @@
      </rect>
     </property>
     <property name="statusTip">
-     <string>Quick select any previous roll</string>
+     <string>Quick recent roll formulas</string>
     </property>
    </widget>
    <widget class="QPushButton" name="simulate">
@@ -319,6 +331,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="statusTip">
+     <string>Start simulation of current roll configuration</string>
     </property>
     <property name="text">
      <string>Simlulate</string>
@@ -340,6 +355,9 @@
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="statusTip">
+     <string>Avarage hit rate vs current set AC (over the last 8 rolls)</string>
     </property>
     <property name="text">
      <string>##</string>

@@ -29,6 +29,7 @@ def apply_ui_connections():
     MainWindow.setWindowTitle("Chipy's 5E Dice Sim")
 
     # link menus
+    gui_main.actionExit.triggered.connect(lambda: app.exit())
     gui_main.actionProject_GitHub.triggered.connect(lambda: show_popup("Thanks for your curiosity! Please feel free to check out the project at https://github.com/iamchipy/chipys-5e-companion"))
     gui_main.actionChipy_Dev.triggered.connect(lambda: show_popup("Thanks for your curiosity! You can find more of my stuff at www.chipy.dev"))
 
@@ -208,5 +209,5 @@ if __name__ == "__main__":
     # Modify the gui with connections and links
     apply_ui_connections()  # here we modify actions to the GUI
 
-    # clean up on exit
+    # run app as the last thing in the script
     sys.exit(app.exec_())
