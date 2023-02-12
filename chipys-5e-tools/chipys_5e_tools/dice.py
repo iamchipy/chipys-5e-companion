@@ -45,10 +45,12 @@ class Dice:
 
                 # all of these are only being applied to the first dice in the formula and only once 
                 if not adv_rolled:
+                    print("i",int_value)
                     i, s = self.roll(element, flag_adv=flag_adv, flag_dis=flag_dis, flag_ins=flag_ins, flag_ela=flag_ela)
                     dice_report += str(s)
                     int_value += i
                     adv_rolled = True
+                    print("i",int_value, i)
                 else:
                     i, s = self.roll(element)
                     dice_report += str(s)
@@ -96,8 +98,9 @@ class Dice:
         # loop ones for each dice being roll 
         for i in range(int(dice_array[0])):
             # base dice
-            dice_rolls.append(self._roll_value(dice_array[1]))
-            kept_rolls = dice_rolls
+            roll = self._roll_value(dice_array[1])
+            dice_rolls.append(roll)
+            kept_rolls.append(roll)      
 
             # if we've not yet rolled advantages for this dice formula yet (can't only get one adv)
             # we do this on the first roll so that we can manipulate the list safely
@@ -108,17 +111,23 @@ class Dice:
                     adv_rolled = True
                     # if we have positive advantage then drop lower of the two
                     if adv_counter>0:
+                        
                         # if we have Elven Accuracy we do a 3rd dice and drop lowest
                         if flag_ela:
+                            # roll the double adv and keep best
                             dice_rolls.append(self._roll_value(dice_array[1]))
                             dice_rolls.sort()
                             kept_rolls = dice_rolls[2:]
                         else:
+                            print("pre", dice_rolls)
+                            # sort and keep best per normal adv
                             dice_rolls.sort()
                             kept_rolls = dice_rolls[1:]
+                            
                     else:
                         dice_rolls.sort()
-                        kept_rolls = dice_rolls[:1]                     
+                        kept_rolls = dice_rolls[:1]     
+                    print("post", kept_rolls)      
 
         return sum(kept_rolls), dice_rolls
 
@@ -146,11 +155,12 @@ class Dice:
 
 if __name__ == "__main__":
     d = Dice()
-    print("1d20 ", d.r("1d20"))
-    print("1d20+1 ", d.r("1d20+1"))
-    print("2d20 ", d.r("2d20"))
-    print("2d20 a", d.r("2d20",True))
-    print("2d20 a", d.r("2d20",True,True))
-    print("2d20 a", d.r("4d20",show_rolls=True, flag_adv=1, flag_ela=1))
-    print("1d20 ", d.r("1d20",show_rolls=1,flag_gwm=1))
-    print("1d20 ", d.r("1d20",show_rolls=1,flag_spec=100))
+    # print("1d20 ", d.r("1d20"))
+    # print("1d20+1 ", d.r("1d20+1"))
+    # print("2d20 ", d.r("2d20"))
+    # print("2d20 a", d.r("2d20",True))
+    # print("2d20 a", d.r("2d20",True,True))
+    # print("2d20 a", d.r("4d20",show_rolls=True, flag_adv=1, flag_ela=1))
+    # print("1d20 ", d.r("1d20",show_rolls=1,flag_gwm=1))
+    # print("1d20 ", d.r("1d20",show_rolls=1,flag_spec=100))
+    print("2d20 ", d.r("2d20",show_rolls=1,flag_adv=True))
