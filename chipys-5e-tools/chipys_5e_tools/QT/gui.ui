@@ -32,6 +32,9 @@
       <height>17</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Toggle to roll with Advantage</string>
+    </property>
     <property name="text">
      <string>Advantage</string>
     </property>
@@ -48,8 +51,11 @@
       <height>17</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Toggle to roll with the -5 hit for Great Weapon Master &amp; SharpShooter</string>
+    </property>
     <property name="text">
-     <string>PAM/SharpShooter</string>
+     <string>GWM/SharpShooter</string>
     </property>
    </widget>
    <widget class="QPushButton" name="roll_active">
@@ -84,6 +90,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Select Armor class (or leave on '-1' to simular for all classes)</string>
+    </property>
     <property name="minimum">
      <number>-1</number>
     </property>
@@ -91,7 +100,7 @@
      <number>35</number>
     </property>
     <property name="value">
-     <number>10</number>
+     <number>-1</number>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -135,6 +144,9 @@
       <height>17</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Toggle to roll with Ispiration (Advantage)</string>
+    </property>
     <property name="text">
      <string>Inpiration</string>
     </property>
@@ -150,6 +162,9 @@
       <width>131</width>
       <height>17</height>
      </rect>
+    </property>
+    <property name="statusTip">
+     <string>Toggle to roll with as blessed (+1d4)</string>
     </property>
     <property name="text">
      <string>Blessed</string>
@@ -199,6 +214,9 @@
       <height>17</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Toggle to roll with Disadvantage</string>
+    </property>
     <property name="text">
      <string>Disadvantage</string>
     </property>
@@ -211,6 +229,9 @@
       <width>161</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="statusTip">
+     <string>Dice Attack formula (your hit dice when attacking) Example: 1d20+1d4+2+1</string>
     </property>
     <property name="text">
      <string>1d20+1</string>
@@ -228,6 +249,9 @@
       <height>17</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Toggle to roll with &quot;double&quot; advantage when you have Elven Accuracy</string>
+    </property>
     <property name="text">
      <string>Elven Accuracy</string>
     </property>
@@ -237,7 +261,7 @@
      <rect>
       <x>300</x>
       <y>180</y>
-      <width>121</width>
+      <width>111</width>
       <height>51</height>
      </rect>
     </property>
@@ -275,6 +299,9 @@
       <height>151</height>
      </rect>
     </property>
+    <property name="statusTip">
+     <string>Quick select any previous roll</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="simulate">
     <property name="enabled">
@@ -300,9 +327,9 @@
    <widget class="QLineEdit" name="hit_chance">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>420</x>
       <y>180</y>
-      <width>81</width>
+      <width>91</width>
       <height>51</height>
      </rect>
     </property>
