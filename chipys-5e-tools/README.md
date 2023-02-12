@@ -17,7 +17,7 @@
 pip install chipys-5e-tools
 ```
 v0.1.1 is now live with basic Hit-roll-vs-AC simulations
-![alt text](https://https://github.com/iamchipy/chipys-5e-companion/tree/main/chipys-5e-tools/chipys_5e_tools/img/demo_main.png?raw=true)
+![alt text](https://github.com/iamchipy/chipys-5e-companion/tree/main/chipys-5e-tools/chipys_5e_tools/img/demo_main.png?raw=true)
 
 ## License
 
