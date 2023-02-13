@@ -4,6 +4,7 @@ import QT.gui_report
 import sys
 import dice
 
+
 # define globals
 formula_log = [""]
 formula_log_model = None
@@ -11,6 +12,7 @@ dice_log = []
 dice_log_model = None
 dice_tower = dice.Dice()
 
+app = None
 gui_main = None
 MainWindow = None
 gui_report = None
@@ -25,7 +27,9 @@ def apply_ui_connections():
     global gui_main, MainWindow, gui_report, reportWindow
 
     # set window icon
-    MainWindow.setWindowIcon(QtGui.QIcon('Chipy128.ico'))
+    # MainWindow.setWindowIcon(QtGui.QIcon('C:\Dropbox\_SCRIPTS\chipys-5e-companion\chipys-5e-tools\chipys_5e_tools\img\Chipy128.ico'))
+    # MainWindow.setWindowIcon(QtGui.QIcon('C:\Dropbox\_SCRIPTS\chipys-5e-companion\chipys-5e-tools\chipys_5e_tools\img\ChipyLogo.png'))
+    app.setWindowIcon(QtGui.QIcon('C:\Dropbox\_SCRIPTS\chipys-5e-companion\chipys-5e-tools\chipys_5e_tools\img\ChipyLogo.png'))
     MainWindow.setWindowTitle("Chipy's 5E Dice Sim")
 
     # link menus
@@ -172,6 +176,7 @@ def build_report_table(table_data:dict, report_title:str="Results of simulation:
             largest_row = len(set)
 
     gui_report.report_title.setText(report_title)
+    ReportWindow.setWindowTitle("Chipy's 5E Dice Sim Report")
 
     gui_report.report_table.setRowCount(len(table_data))
     gui_report.report_table.setColumnCount(largest_row)
@@ -193,6 +198,12 @@ def build_report_table(table_data:dict, report_title:str="Results of simulation:
 
 if __name__ == "__main__":
     import sys
+    import ctypes
+
+    # required for Windows to recognize a Python script as it's own applications and thus have a unique Taskbar Icon
+    # https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105
+    myappid = u'chipy.5ETools.DiceSim.v0.1.4' # arbitrary string
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
     # build main GUI
     app = QtWidgets.QApplication(sys.argv)
