@@ -65,27 +65,27 @@ def click_formula_log(index):
     formula_used_was = str(item.text())
     gui_main.attack_formula.setText(formula_used_was)    
 
-def roll_active(gui_obj):
+def roll_active(gui_obj, roll_logging=True):
     global dice_log, dice_log_model, formula_log, formula_log_model
     dice_tower = dice.Dice()
     formula = gui_obj.attack_formula.text()
-    flag_adv = gui_obj.flag_adv.isChecked()
-    flag_bls = gui_obj.flag_bls.isChecked()
-    flag_dis = gui_obj.flag_dis.isChecked()
-    flag_ela = gui_obj.flag_ela.isChecked()
-    flag_ins = gui_obj.flag_ins.isChecked()
-    flag_gwm = gui_obj.flag_gwm.isChecked()
+    adv = gui_obj.flag_adv.isChecked()
+    bls = gui_obj.flag_bls.isChecked()
+    dis = gui_obj.flag_dis.isChecked()
+    elv = gui_obj.flag_ela.isChecked()
+    ins = gui_obj.flag_ins.isChecked()
+    gwm = gui_obj.flag_gwm.isChecked()
     ac= gui_obj.armor_class.value()
     hit_rate = [0,0]
   
-
-    roll, log, formula = dice_tower.r(formula, show_rolls=True,
-                                                flag_adv = flag_adv,
-                                                flag_bls = flag_bls,
-                                                flag_dis = flag_dis,
-                                                flag_ela = flag_ela,
-                                                flag_ins = flag_ins,
-                                                flag_gwm = flag_gwm)
+    roll, log, formula = dice_tower.roll(   formula, show_rolls=True,
+                                            adv = adv,
+                                            bls = bls,
+                                            dis = dis,
+                                            elv = elv,
+                                            ins = ins,
+                                            gwm = gwm,
+                                            log=roll_logging)
 
     # build log
     dice_log.append([formula,roll,log])
@@ -131,7 +131,7 @@ def run_sim(gui_obj):
     for i in range(int(sim_count)):
     # for i in range(1000):
         # roll dice
-        rolled = roll_active(gui_obj)
+        rolled = roll_active(gui_obj, roll_logging=False)
         
         # log the roll in our tallies
         roll_tally[rolled-1] += 1
@@ -222,3 +222,4 @@ if __name__ == "__main__":
 
     # run app as the last thing in the script
     sys.exit(app.exec_())
+
