@@ -1,39 +1,95 @@
 import random as rng
+import datetime
+import time
+import logging
 
 def __init__():
     pass
+
+class RollLog:
+    def __init__(self,result:int, formula:str, raw_rolls:str="",time_stamp:datetime.datetime=0, adv:bool=False, bls:bool= False,dis:bool= False,elv:bool= False,ins:bool= False,gwm:bool= False, spe:int=0) -> None:
+        self.result = result
+        self.time_stamp = time_stamp
+        self.formula = formula
+        self.adv = adv
+        self.bls = bls
+        self.dis = dis
+        self.elv = elv
+        self.ins = ins
+        self.gwm = gwm
+        self.spe = spe
+
+        if self.time_stamp == 0:
+            self.time_stamp = time.time()
+
+class Ledger:
+    def __init__(self) -> None:
+        self.history = []
+        pass
+
+    def log(self, new_entry:RollLog):
+        self.history.append(new_entry)
+        print("Logging:", new_entry.__dict__)
+
+    def lookup_range(self, first_index:int, last_index:int)->list:
+        requested_list=[]
+        for i in range(first_index, last_index):
+            requested_list.append(self.lookup_entry(i))
+        return requested_list
+    
+    def lookup_entry(self, entry_index:int)->RollLog:
+        if len(self.history) > entry_index:
+            return self.history[entry_index]
+        else:
+            print(f"lookup of index:{entry_index} invalid index")
+
+    def avg_of_last(self, number_of_rolls:int)->float:
+        pass
+
+    def avg_of_range(self, first_index:int, last_index:int)->float:
+        pass
+
+    def min_of_last(self, number_of_rolls:int)->float:
+        pass
+
+    def min_of_range(self, first_index:int, last_index:int)->float:
+        pass
+
+    def max_of_last(self, number_of_rolls:int)->float:
+        pass
+
+    def max_of_range(self, first_index:int, last_index:int)->float:
+        pass
 
 class Dice:
     """General dice object to collect and run dice formulas 
     """
     def __init__(self):
-        pass
+        self.ledger = Ledger()
 
-    def r(self, in_str:str="1d20", flag_adv:bool=False, show_rolls:bool= False, flag_bls:bool= False,flag_dis:bool= False,flag_ela:bool= False,flag_ins:bool= False,flag_gwm:bool= False, flag_spec:int=0):
-        """"alias for self.formula()"""
-        return self.formula(in_str, flag_adv, show_rolls, flag_bls, flag_dis, flag_ela, flag_ins, flag_gwm, flag_spec)
-
-    def f(self, in_str:str="1d20", flag_adv:bool=False, show_rolls:bool= False,flag_bls:bool= False,flag_dis:bool= False,flag_ela:bool= False,flag_ins:bool= False,flag_gwm:bool= False, flag_spec:int=0):
-        """"alias for self.formula()"""
-        return self.formula(in_str, flag_adv, show_rolls, flag_bls, flag_dis, flag_ela, flag_ins, flag_gwm, flag_spec)
-
-    def formula(self, in_str:str="1d20", flag_adv:bool=False, show_rolls:bool= False, flag_bls:bool= False,flag_dis:bool= False,flag_ela:bool= False,flag_ins:bool= False,flag_gwm:bool= False, flag_spec:int=0):
-        """_summary_
+    def roll(self, formula:str="1d20", show_rolls:bool= False, adv:bool=False, bls:bool= False, dis:bool= False, elv:bool= False, ins:bool= False, gwm:bool= False, spe:int=0, log:bool=True) -> int:
+        """Public method for rolling a full dice formula allowing for all flagflag_bls needed in DnD5e
 
         Args:
-            in_str (str, optional): Desired dice-formula to roll written in the #d##+#d##+# format. EXAMPLE: 1d20+2d4+3 Defaults to "1d20".
-            advantage (bool, optional): When True the first dice in the formula will get one additional roll and the lower will be dropped. So "2d20" would become 3x d20 rolls with the lowest dropped. Defaults to False.
+            formula (str, optional): Desired dice-formula to roll written in the #d##+#d##+# format. EXAMPLE: 1d20+2d4+3. Defaults to "1d20".
+            flag_adv (bool, optional): When True the first dice in the formula will get one additional roll and the lower will be dropped. So "2d20" would become 3x d20 rolls with the lowest dropped. Defaults to False.
             show_rolls (bool, optional): When True return value will be an array including each dice roll and the originating formula. Defaults to False.
+            flag_bls (bool, optional): _description_. Defaults to False.
+            flag_dis (bool, optional): _description_. Defaults to False.
+            flag_ela (bool, optional): _description_. Defaults to False.
+            flag_ins (bool, optional): _description_. Defaults to False.
+            flag_gwm (bool, optional): _description_. Defaults to False.
+            flag_spec (int, optional): _description_. Defaults to 0.
 
         Returns:
-            int or list: depending on "show_rolls" flag will either return a single int value or a list [value,["each","dice","roll"],"formula given"]
+            int: final dice value (CAN ALSO return (int,str,str) with show_rolls flag that tells you what dice rolled and what the origin formula was)
         """
         dice_report= ""
         adv_rolled = False
         int_value = 0
-        formula = in_str.split("+")  # | (pipe) separates delimiters
+        formula = formula.split("+")  # | (pipe) separates delimiters
         # Blessed gets handled here ------------- flag_bls
-        if flag_bls:
+        if bls:
             formula.append("1d4")
             
         for element in formula:
@@ -45,32 +101,35 @@ class Dice:
 
                 # all of these are only being applied to the first dice in the formula and only once 
                 if not adv_rolled:
-                    i, s = self.roll(element, flag_adv=flag_adv, flag_dis=flag_dis, flag_ins=flag_ins, flag_ela=flag_ela)
+                    i, s = self._roll_with_adv(element, adv=adv, dis=dis, ins=ins, elv=elv)
                     dice_report += str(s)
                     int_value += i
                     adv_rolled = True
                 else:
-                    i, s = self.roll(element)
+                    i, s = self._roll_with_adv(element)
                     dice_report += str(s)
                     int_value += i                    
             else:
                 int_value += int(element)
 
         # SharpShooter/GreatWepMaster gets handled here ------------- flag_gwm
-        if flag_gwm:
+        if gwm:
             int_value -= 5
 
         # SPECIAL gets handled here ------------- flag_gwm
-        int_value += flag_spec            
+        int_value += spe            
         
+        if log:
+            self.ledger.log(RollLog(int_value, raw_rolls=dice_report, formula=formula, adv=adv, bls=bls, dis=dis, elv=elv, ins=ins, gwm=gwm, spe=spe))
+
         # check what info to return and return it
         if show_rolls:
-            return int_value, dice_report, in_str
+            return int_value, dice_report, formula
         else:
             return int_value
     
-    def roll(self, dice_string="1d20", flag_adv:bool=False, flag_dis:bool=False, flag_ins:bool=False, flag_ela:bool=False)-> int:
-        """_summary_
+    def _roll_with_adv(self, dice_string="1d20", adv:bool=False, dis:bool=False, ins:bool=False, elv:bool=False)-> int:
+        """Internal Method that handles the portion of rolling a dice value of formula value and adv/dis taking into account
 
         Args:
             dice_string (str, optional): Dice formula. Defaults to "1d20".
@@ -84,9 +143,9 @@ class Dice:
         """
         # calc advantange
         adv_counter = 0
-        if flag_adv or flag_ins:
+        if adv or ins:
             adv_counter +=1
-        if flag_dis:
+        if dis:
             adv_counter -=1          
 
         adv_rolled = False
@@ -96,7 +155,7 @@ class Dice:
         # loop ones for each dice being roll 
         for i in range(int(dice_array[0])):
             # base dice
-            roll = self._roll_value(dice_array[1])
+            roll = self._roll_single_dice(dice_array[1])
             dice_rolls.append(roll)
             kept_rolls.append(roll)      
 
@@ -105,15 +164,15 @@ class Dice:
             if not adv_rolled:
                 # if there are adv/dis to be applied roll a second dice
                 if adv_counter!=0:
-                    dice_rolls.append(self._roll_value(dice_array[1]))
+                    dice_rolls.append(self._roll_single_dice(dice_array[1]))
                     adv_rolled = True
                     # if we have positive advantage then drop lower of the two
                     if adv_counter>0:
                         
                         # if we have Elven Accuracy we do a 3rd dice and drop lowest
-                        if flag_ela:
+                        if elv:
                             # roll the double adv and keep best
-                            dice_rolls.append(self._roll_value(dice_array[1]))
+                            dice_rolls.append(self._roll_single_dice(dice_array[1]))
                             dice_rolls.sort()
                             kept_rolls = dice_rolls[2:]
                         else:
@@ -126,7 +185,7 @@ class Dice:
 
         return sum(kept_rolls), dice_rolls
 
-    def _roll_value(self, sides_to_roll=0):
+    def _roll_single_dice(self, sides_to_roll=0):
         """Most basic roll command to generate a random number within the range
 
         Returns:
@@ -136,7 +195,15 @@ class Dice:
             sides_to_roll = self.sides
         return int(rng.randrange(1,int(sides_to_roll)+1))
 
-    def max_roll(self, formula):
+    def max_roll(self, formula:str="1d20+5")->int:
+        """Simple loop to check for the highest possible dice roll of a dice formula
+
+        Args:
+            formula (str, optional): Dice formula. Defaults to "1d20+5".
+
+        Returns:
+            int: Max possible roll value
+        """
         parts= formula.split("+")
         max = 0
         for item in parts:
@@ -158,4 +225,4 @@ if __name__ == "__main__":
     # print("2d20 a", d.r("4d20",show_rolls=True, flag_adv=1, flag_ela=1))
     # print("1d20 ", d.r("1d20",show_rolls=1,flag_gwm=1))
     # print("1d20 ", d.r("1d20",show_rolls=1,flag_spec=100))
-    print("2d20 ", d.r("2d20",show_rolls=1,flag_adv=True))
+    print("2d20 ", d.roll("2d20",show_rolls=1,adv=True))
