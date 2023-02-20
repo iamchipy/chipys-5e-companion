@@ -27,6 +27,10 @@ class Ledger:
         self.history = []
         pass
 
+    def _last_entry_index(self):
+        # self._last_entry_index = len(self.history)-1
+        return len(self.history)-1
+
     def log(self, new_entry:RollLog):
         self.history.append(new_entry)
         print("Logging:", new_entry.__dict__)
@@ -37,20 +41,24 @@ class Ledger:
             requested_list.append(self.lookup_entry(i))
         return requested_list
     
-    def lookup_entry(self, entry_index:int)->RollLog:
+    def lookup_entry(self, entry_index:int=-1)->RollLog:
+        if entry_index < 0:
+            entry_index = self._last_entry_index()
         if len(self.history) > entry_index:
             return self.history[entry_index]
         else:
             print(f"lookup of index:{entry_index} invalid index")
 
-    def avg_of_last(self, number_of_rolls:int)->float:
-        return self.avg_of_range(0,number_of_rolls)
+    def avg_of_last(self, number_of_rolls:int=-1)->float:
+        if number_of_rolls < 0:
+            number_of_rolls=self._last_entry_index()
+        return self.avg_of_range(0, number_of_rolls)
 
     def avg_of_range(self, first_index:int, last_index:int)->float:
         lookup_list = []
         for i in range(first_index, last_index):
             lookup_list.append(self.history[i].result)
-        return sum(lookup_list)/len(lookup_list)
+        return round(sum(lookup_list)/len(lookup_list),1)
 
     def min_of_last(self, number_of_rolls:int)->float:
         pass
@@ -220,12 +228,18 @@ class Dice:
 
 if __name__ == "__main__":
     d = Dice()
-    # print("1d20 ", d.r("1d20"))
-    # print("1d20+1 ", d.r("1d20+1"))
-    # print("2d20 ", d.r("2d20"))
-    # print("2d20 a", d.r("2d20",True))
-    # print("2d20 a", d.r("2d20",True,True))
-    # print("2d20 a", d.r("4d20",show_rolls=True, flag_adv=1, flag_ela=1))
-    # print("1d20 ", d.r("1d20",show_rolls=1,flag_gwm=1))
-    # print("1d20 ", d.r("1d20",show_rolls=1,flag_spec=100))
+    print("1d20 ", d.roll("1d20"))
+    print("1d20+1 ", d.roll("1d20+1"))
+    print("2d20 ", d.roll("2d20"))
+    print("2d20 a", d.roll("2d20",True))
+    print("2d20 a", d.roll("2d20",True,True))
+    print("2d20 a", d.roll("4d20",show_rolls=True, adv=1, elv=1))
+    print("1d20 ", d.roll("1d20",show_rolls=1,gwm=1))
+    print("1d20 ", d.roll("1d20",show_rolls=1,spe=100))
     print("2d20 ", d.roll("2d20",show_rolls=1,adv=True))
+
+    # logging
+    print("History: ", d.ledger.lookup_entry().result)
+    print("History: ", d.ledger.avg_of_last())
+    print("History: ", d.ledger.avg_of_last(5))
+    
