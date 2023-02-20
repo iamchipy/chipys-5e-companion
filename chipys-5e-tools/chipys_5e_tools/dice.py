@@ -42,6 +42,14 @@ class Ledger:
         return requested_list
     
     def lookup_entry(self, entry_index:int=-1)->RollLog:
+        """Method to recall an entry from the Ledger. 
+
+        Args:
+            entry_index (int, optional): The index of the entry that is being request. When missing or set to a value below 0 it will return the most recent entry. Defaults to -1.
+
+        Returns:
+            RollLog: Object of the requested Entry (in RollLog format so use ".result" for just the dice roll)
+        """
         if entry_index < 0:
             entry_index = self._last_entry_index()
         if len(self.history) > entry_index:
@@ -239,6 +247,7 @@ if __name__ == "__main__":
     print("2d20 ", d.roll("2d20",show_rolls=1,adv=True))
 
     # logging
+    print("History: ", d.ledger.lookup_entry().__dict__)
     print("History: ", d.ledger.lookup_entry().result)
     print("History: ", d.ledger.avg_of_last())
     print("History: ", d.ledger.avg_of_last(5))
