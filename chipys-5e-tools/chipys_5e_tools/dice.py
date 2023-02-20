@@ -44,10 +44,13 @@ class Ledger:
             print(f"lookup of index:{entry_index} invalid index")
 
     def avg_of_last(self, number_of_rolls:int)->float:
-        pass
+        return self.avg_of_range(0,number_of_rolls)
 
     def avg_of_range(self, first_index:int, last_index:int)->float:
-        pass
+        lookup_list = []
+        for i in range(first_index, last_index):
+            lookup_list.append(self.history[i].result)
+        return sum(lookup_list)/len(lookup_list)
 
     def min_of_last(self, number_of_rolls:int)->float:
         pass
