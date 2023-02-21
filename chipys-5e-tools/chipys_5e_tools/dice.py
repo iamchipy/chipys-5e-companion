@@ -76,6 +76,14 @@ class Ledger:
             print(f"lookup of index:{entry_index} invalid index")
 
     def avg_of_last(self, number_of_rolls:int=-1)->float:
+        """Method to fetching the last X number of entries and then averages the rolls (uses .avg_of_range(0,X))
+
+        Args:
+            number_of_rolls (int, optional): Number of entries to include where any negative value is assumed to be the last entry. Defaults to -1.
+
+        Returns:
+            float: Returns a float value that is the AVG rounded to .0
+        """
         if number_of_rolls < 0:
             number_of_rolls=self._last_entry_index()
         return self.avg_of_range(0, number_of_rolls)
