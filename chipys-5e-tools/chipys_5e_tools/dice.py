@@ -7,9 +7,9 @@ def __init__():
     pass
 
 class RollLog:
-    def __init__(self,result:int, formula:str, raw_rolls:str="",time_stamp:datetime.datetime=0, adv:bool=False, bls:bool= False,dis:bool= False,elv:bool= False,ins:bool= False,gwm:bool= False, spe:int=0) -> None:
+    def __init__(self,result:int, formula:str, raw_rolls:str="",datetime_float:float=time.time(), adv:bool=False, bls:bool= False,dis:bool= False,elv:bool= False,ins:bool= False,gwm:bool= False, spe:int=0) -> None:
         self.result = result
-        self.time_stamp = time_stamp
+        self.time_stamp = datetime_float
         self.formula = formula
         self.adv = adv
         self.bls = bls
@@ -74,6 +74,7 @@ class Ledger:
             return self.history[entry_index]
         else:
             print(f"lookup of index:{entry_index} invalid index")
+            return RollLog(0,"Empty")
 
     def avg_of_last(self, number_of_rolls:int=-1)->float:
         """Method to fetching the last X number of entries and then averages the rolls (uses .avg_of_range(0,X))
@@ -141,12 +142,12 @@ class Dice:
         dice_report= ""
         adv_rolled = False
         int_value = 0
-        formula = formula.split("+")  # | (pipe) separates delimiters
+        split_formula = formula.split("+")  # | (pipe) separates delimiters
         # Blessed gets handled here ------------- flag_bls
         if bls:
-            formula.append("1d4")
+            split_formula.append("1d4")
             
-        for element in formula:
+        for element in split_formula:
             if "d" in element:
                 # Advantage get handled here ------------- flag_adv
                 # Disadvantage get handled here ------------- flag_dis
@@ -174,15 +175,15 @@ class Dice:
         int_value += spe            
         
         if log:
-            self.ledger.log(RollLog(int_value, raw_rolls=dice_report, formula=formula, adv=adv, bls=bls, dis=dis, elv=elv, ins=ins, gwm=gwm, spe=spe))
+            self.ledger.log(RollLog(int_value, raw_rolls=dice_report, formula=str(split_formula), adv=adv, bls=bls, dis=dis, elv=elv, ins=ins, gwm=gwm, spe=spe))
 
         # check what info to return and return it
         if show_rolls:
-            return int_value, dice_report, formula
+            return int_value, dice_report, split_formula
         else:
             return int_value
     
-    def _roll_with_adv(self, dice_string="1d20", adv:bool=False, dis:bool=False, ins:bool=False, elv:bool=False)-> int:
+    def _roll_with_adv(self, dice_string="1d20", adv:bool=False, dis:bool=False, ins:bool=False, elv:bool=False):
         """Internal Method that handles the portion of rolling a dice value of formula value and adv/dis taking into account
 
         Args:
