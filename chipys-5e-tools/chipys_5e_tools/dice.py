@@ -89,6 +89,15 @@ class Ledger:
         return self.avg_of_range(0, number_of_rolls)
 
     def avg_of_range(self, first_index:int, last_index:int)->float:
+        """Method used to fetch and average the rolls from range A-B (both inclusive)
+
+        Args:
+            first_index (int): inital index (inclusive)
+            last_index (int): ending index (inclusive)
+
+        Returns:
+            float: Returns a float value that is the AVG rounded to .0
+        """
         lookup_list = []
         for i in range(first_index, last_index):
             lookup_list.append(self.history[i].result)
