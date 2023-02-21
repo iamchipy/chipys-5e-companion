@@ -27,13 +27,22 @@ class Ledger:
         self.history = []
         pass
 
-    def _last_entry_index(self):
-        # self._last_entry_index = len(self.history)-1
+    def _last_entry_index(self)-> int:
+        """internal Method to return the last entry in the Ledger
+
+        Returns:
+            int: returns the index of the last entry
+        """
         return len(self.history)-1
 
     def log(self, new_entry:RollLog):
+        """Simple method to add (append) a new entry to the ledger
+
+        Args:
+            new_entry (RollLog): accepts RollLog entries for later use
+        """
         self.history.append(new_entry)
-        print("Logging:", new_entry.__dict__)
+        # print("Logging:", new_entry.__dict__)
 
     def lookup_range(self, first_index:int, last_index:int)->list:
         requested_list=[]
