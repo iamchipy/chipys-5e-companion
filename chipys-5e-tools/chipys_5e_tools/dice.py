@@ -45,6 +45,15 @@ class Ledger:
         # print("Logging:", new_entry.__dict__)
 
     def lookup_range(self, first_index:int, last_index:int)->list:
+        """Method to fetch and return a list filled with RollLog objects
+
+        Args:
+            first_index (int): inital index (inclusive)
+            last_index (int): ending index (inclusive)
+
+        Returns:
+            list: list of RollLog objects (access .result params for dice data)
+        """
         requested_list=[]
         for i in range(first_index, last_index):
             requested_list.append(self.lookup_entry(i))
@@ -260,4 +269,6 @@ if __name__ == "__main__":
     print("History: ", d.ledger.lookup_entry().result)
     print("History: ", d.ledger.avg_of_last())
     print("History: ", d.ledger.avg_of_last(5))
+    print("History: ", d.ledger.lookup_range(0,2))
+    print("History: ", d.ledger.lookup_range(0,2))
     
