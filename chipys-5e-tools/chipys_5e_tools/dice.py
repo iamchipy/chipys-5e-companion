@@ -106,7 +106,16 @@ class Ledger:
         return round(sum(lookup_list)/len(lookup_list),1)
 
     def min_of_last(self, number_of_rolls:int)->int:
-        pass
+        """Alias for min_of_range() for the last X number entries prior to _last_entry_index()
+
+        Args:
+            number_of_rolls (int): number of rolls to consider
+
+        Returns:
+            int: lowest value rolled in the given history range
+        """
+        i = self._last_entry_index()
+        return self.min_of_range(i-number_of_rolls,i)
 
     def min_of_range(self, first_index:int, last_index:int)->int:
         """Methhd to fetch range of entries from ledger then return the lowest roll
@@ -126,27 +135,33 @@ class Ledger:
         return lowest_roll
 
     def max_of_last(self, number_of_rolls:int)->int:
-        """Alias for min_of_range() for the last X number entries prior to _last_entry_index()
+        """Alias for max_of_range() for the last X number entries prior to _last_entry_index()
 
         Args:
             number_of_rolls (int): number of rolls to consider
 
         Returns:
-            int: lowest value rolled in the given history range
+            int: highest value rolled in the given history range
         """
         i = self._last_entry_index()
-        return self.min_of_range(i-number_of_rolls,i)
+        return self.max_of_range(i-number_of_rolls,i)
 
     def max_of_range(self, first_index:int, last_index:int)->int:
-        """_summary_
+        """Methhd to fetch range of entries from ledger then return the highest roll
 
         Args:
             first_index (int): inital index (inclusive)
             last_index (int): ending index (inclusive)
-
+            
         Returns:
-            int: _description_
+            int: Highest roll found within the range
         """
+        range_list = self.lookup_range(first_index, last_index)
+        highest_roll = 0
+        for item in range_list:
+            if item.result > highest_roll:
+                highest_roll = item.result
+        return highest_roll
 
 class Dice:
     """General dice object to collect and run dice formulas 
