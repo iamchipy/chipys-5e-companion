@@ -44,6 +44,21 @@ class Ledger:
         self.history.append(new_entry)
         # print("Logging:", new_entry.__dict__)
 
+    def lookup_last(self, number_of_entries:int)->list:
+        """Method to fetch and return a list filled with the most recent RollLog objects
+
+        Args:
+            number_of_entries (int): The number of desired entries to return
+
+        Returns:
+            list: list of RollLog objects (access .result params for dice data)
+        """
+        i=self._last_entry_index()
+        requested_list=[]
+        for i in range(i-number_of_entries, i):
+            requested_list.append(self.lookup_entry(i))
+        return requested_list
+
     def lookup_range(self, first_index:int, last_index:int)->list:
         """Method to fetch and return a list filled with RollLog objects
 
@@ -325,7 +340,7 @@ if __name__ == "__main__":
     print("2d20 a", d.roll("2d20",True))
     print("2d20 a", d.roll("2d20",True,True))
     print("2d20 a", d.roll("4d20",show_rolls=True, adv=1, elv=1))
-    print("1d20 ", d.roll("1d20",show_rolls=1,gwm=1))
+    print("1d20 gwm", d.roll("1d20",show_rolls=1,gwm=1))
     print("1d20 ", d.roll("1d20",show_rolls=1,spe=100))
     print("2d20 ", d.roll("2d20",show_rolls=1,adv=True))
 
@@ -335,5 +350,6 @@ if __name__ == "__main__":
     print("History: ", d.ledger.avg_of_last())
     print("History: ", d.ledger.avg_of_last(5))
     print("History: ", d.ledger.lookup_range(0,2))
-    print("History: ", d.ledger.lookup_range(0,2))
+    print("History: ", d.ledger.max_of_last(5))
+    print("History: ", d.ledger.min_of_last(5))
     
