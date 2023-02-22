@@ -53,11 +53,8 @@ class Ledger:
         Returns:
             list: list of RollLog objects (access .result params for dice data)
         """
-        i=self._last_entry_index()
-        requested_list=[]
-        for i in range(i-number_of_entries, i):
-            requested_list.append(self.lookup_entry(i))
-        return requested_list
+        l = self._last_entry_index()
+        return self.lookup_range(l-number_of_entries,l)
 
     def lookup_range(self, first_index:int, last_index:int)->list:
         """Method to fetch and return a list filled with RollLog objects
@@ -71,10 +68,12 @@ class Ledger:
         """
         requested_list=[]
         for i in range(first_index, last_index):
-            requested_list.append(self.lookup_entry(i))
+            v = self.lookup_entry(i)
+            if v:
+                requested_list.append(v)
         return requested_list
     
-    def lookup_entry(self, entry_index:int=-1)->RollLog:
+    def lookup_entry(self, entry_index:int):
         """Method to recall an entry from the Ledger. 
 
         Args:
@@ -83,13 +82,14 @@ class Ledger:
         Returns:
             RollLog: Object of the requested Entry (in RollLog format so use ".result" for just the dice roll)
         """
-        if entry_index < 0:
-            entry_index = self._last_entry_index()
-        if len(self.history) > entry_index:
+        l = self._last_entry_index()
+        #assert 0 <= entry_index <= l  # AKA invalid index will fail
+
+        if 0 <= entry_index <= l:
             return self.history[entry_index]
         else:
             print(f"lookup of index:{entry_index} invalid index")
-            return RollLog(0,"Empty")
+            return False
 
     def avg_of_last(self, number_of_rolls:int=-1)->float:
         """Method to fetching the last X number of entries and then averages the rolls (uses .avg_of_range(0,X))
@@ -345,11 +345,10 @@ if __name__ == "__main__":
     print("2d20 ", d.roll("2d20",show_rolls=1,adv=True))
 
     # logging
-    print("History: ", d.ledger.lookup_entry().__dict__)
-    print("History: ", d.ledger.lookup_entry().result)
     print("History: ", d.ledger.avg_of_last())
     print("History: ", d.ledger.avg_of_last(5))
     print("History: ", d.ledger.lookup_range(0,2))
     print("History: ", d.ledger.max_of_last(5))
     print("History: ", d.ledger.min_of_last(5))
+    print("History: ", d.ledger.lookup_last(1))
     

@@ -76,8 +76,8 @@ def roll_active(gui_obj, roll_logging=True):
     ins = gui_obj.flag_ins.isChecked()
     gwm = gui_obj.flag_gwm.isChecked()
     ac= gui_obj.armor_class.value()
-    hit_rate = [0,0]
-  
+    hist = gui_obj.history_to_use.value()
+
     roll, log, formula = dice_tower.roll(   formula, show_rolls=True,
                                             adv = adv,
                                             bls = bls,
@@ -106,12 +106,22 @@ def roll_active(gui_obj, roll_logging=True):
         formula_log_model.appendRow(QtGui.QStandardItem(str(r)))        
 
     # build hit rate
-    for roll in dice_tower.ledger.lookup_last()
-    if  int(r[1]) > ac:
-        hit_rate[0] +=1
-    hit_rate[1] +=1    
-    hit_rate = (100*hit_rate[0])//hit_rate[1]
+    hits = 0
+    misses = 0
+    hit_rate = 0
+    for ledger_entry in dice_tower.ledger.lookup_last(hist):
+        print(ledger_entry.time_stamp, ledger_entry.result)
+        if ledger_entry.result > ac:
+            hits +=1
+        else:
+            misses +=1    
+    if misses < 1:
+        hit_rate = 100
+    else:
+        print(hits,misses)
+        hit_rate = 100*hits//misses
 
+    print(hit_rate)
     # display the current roll results
     gui_obj.result.setText(str(roll))
     gui_obj.hit_chance.setText(str(hit_rate))

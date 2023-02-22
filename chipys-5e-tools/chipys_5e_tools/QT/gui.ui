@@ -392,7 +392,7 @@
      <string>Hit Rate: </string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="history_to_avg">
+   <widget class="QSpinBox" name="history_to_use">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -453,7 +453,7 @@
    <zorder>hit_chance</zorder>
    <zorder>label_4</zorder>
    <zorder>label_5</zorder>
-   <zorder>history_to_avg</zorder>
+   <zorder>history_to_use</zorder>
    <zorder>label_6</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
