@@ -85,9 +85,10 @@ class Ledger:
         Returns:
             float: Returns a float value that is the AVG rounded to .0
         """
+        i = self._last_entry_index()
         if number_of_rolls < 0:
-            number_of_rolls=self._last_entry_index()
-        return self.avg_of_range(0, number_of_rolls)
+            number_of_rolls=i
+        return self.avg_of_range(i - number_of_rolls, i)
 
     def avg_of_range(self, first_index:int, last_index:int)->float:
         """Method used to fetch and average the rolls from range A-B (both inclusive)
@@ -104,17 +105,48 @@ class Ledger:
             lookup_list.append(self.history[i].result)
         return round(sum(lookup_list)/len(lookup_list),1)
 
-    def min_of_last(self, number_of_rolls:int)->float:
+    def min_of_last(self, number_of_rolls:int)->int:
         pass
 
-    def min_of_range(self, first_index:int, last_index:int)->float:
-        pass
+    def min_of_range(self, first_index:int, last_index:int)->int:
+        """Methhd to fetch range of entries from ledger then return the lowest roll
 
-    def max_of_last(self, number_of_rolls:int)->float:
-        pass
+        Args:
+            first_index (int): inital index (inclusive)
+            last_index (int): ending index (inclusive)
+            
+        Returns:
+            int: Lowest roll found within the range
+        """
+        range_list = self.lookup_range(first_index, last_index)
+        lowest_roll = 99
+        for item in range_list:
+            if item.result < lowest_roll:
+                lowest_roll = item.result
+        return lowest_roll
 
-    def max_of_range(self, first_index:int, last_index:int)->float:
-        pass
+    def max_of_last(self, number_of_rolls:int)->int:
+        """Alias for min_of_range() for the last X number entries prior to _last_entry_index()
+
+        Args:
+            number_of_rolls (int): number of rolls to consider
+
+        Returns:
+            int: lowest value rolled in the given history range
+        """
+        i = self._last_entry_index()
+        return self.min_of_range(i-number_of_rolls,i)
+
+    def max_of_range(self, first_index:int, last_index:int)->int:
+        """_summary_
+
+        Args:
+            first_index (int): inital index (inclusive)
+            last_index (int): ending index (inclusive)
+
+        Returns:
+            int: _description_
+        """
 
 class Dice:
     """General dice object to collect and run dice formulas 
