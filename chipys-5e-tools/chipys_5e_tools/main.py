@@ -94,10 +94,6 @@ def roll_active(gui_obj, roll_logging=True):
     dice_log_model.clear()
     for r in dice_log[-8:]:
         dice_log_model.appendRow(QtGui.QStandardItem(str(r)))
-        # log hits
-        if  int(r[1]) > ac:
-            hit_rate[0] +=1
-        hit_rate[1] +=1
 
     # build log last used formula
     expanded_var = formula_log[-1:][0]
@@ -110,6 +106,10 @@ def roll_active(gui_obj, roll_logging=True):
         formula_log_model.appendRow(QtGui.QStandardItem(str(r)))        
 
     # build hit rate
+    for roll in dice_tower.ledger.lookup_last()
+    if  int(r[1]) > ac:
+        hit_rate[0] +=1
+    hit_rate[1] +=1    
     hit_rate = (100*hit_rate[0])//hit_rate[1]
 
     # display the current roll results
