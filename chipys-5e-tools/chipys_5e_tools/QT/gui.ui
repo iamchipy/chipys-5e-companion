@@ -267,13 +267,13 @@
      <rect>
       <x>300</x>
       <y>180</y>
-      <width>81</width>
+      <width>71</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Rubik SemiBold</family>
+      <family>Roboto</family>
       <pointsize>36</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -342,15 +342,15 @@
    <widget class="QLineEdit" name="hit_chance">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>380</x>
       <y>180</y>
-      <width>91</width>
+      <width>111</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Rubik SemiBold</family>
+      <family>Roboto</family>
       <pointsize>36</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -398,11 +398,16 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>210</y>
-      <width>51</width>
-      <height>22</height>
+      <x>500</x>
+      <y>200</y>
+      <width>41</width>
+      <height>28</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>Select Armor class (or leave on '-1' to simular for all classes)</string>
@@ -423,7 +428,7 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>500</x>
       <y>180</y>
       <width>98</width>
       <height>20</height>

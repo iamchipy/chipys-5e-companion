@@ -7,7 +7,7 @@ def __init__():
     pass
 
 class RollLog:
-    def __init__(self,result:int, formula:str, raw_rolls:str="",datetime_float:float=time.time(), adv:bool=False, bls:bool= False,dis:bool= False,elv:bool= False,ins:bool= False,gwm:bool= False, spe:int=0) -> None:
+    def __init__(self,result:int, formula:str, raw_rolls:str="",datetime_float:float=0, adv:bool=False, bls:bool= False,dis:bool= False,elv:bool= False,ins:bool= False,gwm:bool= False, spe:int=0) -> None:
         self.result = result
         self.time_stamp = datetime_float
         self.formula = formula
@@ -25,7 +25,6 @@ class RollLog:
 class Ledger:
     def __init__(self) -> None:
         self.history = []
-        pass
 
     def _last_entry_index(self)-> int:
         """internal Method to return the last entry in the Ledger
@@ -42,7 +41,7 @@ class Ledger:
             new_entry (RollLog): accepts RollLog entries for later use
         """
         self.history.append(new_entry)
-        # print("Logging:", new_entry.__dict__)
+        print("Logging:", len(self.history) ,new_entry.__dict__)
 
     def lookup_last(self, number_of_entries:int)->list:
         """Method to fetch and return a list filled with the most recent RollLog objects
@@ -88,7 +87,7 @@ class Ledger:
         if 0 <= entry_index <= l:
             return self.history[entry_index]
         else:
-            print(f"lookup of index:{entry_index} invalid index")
+            print(f"lookup of index:{entry_index}")
             return False
 
     def avg_of_last(self, number_of_rolls:int=-1)->float:
@@ -351,4 +350,4 @@ if __name__ == "__main__":
     print("History: ", d.ledger.max_of_last(5))
     print("History: ", d.ledger.min_of_last(5))
     print("History: ", d.ledger.lookup_last(1))
-    
+    print("len:",len(d.ledger.history))

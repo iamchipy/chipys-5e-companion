@@ -1,4 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+from PyQt5.QtGui import QBrush
 import QT.gui
 import QT.gui_report
 import sys
@@ -66,8 +67,7 @@ def click_formula_log(index):
     gui_main.attack_formula.setText(formula_used_was)    
 
 def roll_active(gui_obj, roll_logging=True):
-    global dice_log, dice_log_model, formula_log, formula_log_model
-    dice_tower = dice.Dice()
+    global dice_log, dice_log_model, formula_log, formula_log_model, dice_tower
     formula = gui_obj.attack_formula.text()
     adv = gui_obj.flag_adv.isChecked()
     bls = gui_obj.flag_bls.isChecked()
@@ -108,20 +108,19 @@ def roll_active(gui_obj, roll_logging=True):
     # build hit rate
     hits = 0
     misses = 0
-    hit_rate = 0
-    for ledger_entry in dice_tower.ledger.lookup_last(hist):
-        print(ledger_entry.time_stamp, ledger_entry.result)
-        if ledger_entry.result > ac:
-            hits +=1
+    hit_rate = 0    
+    if roll_logging:
+        for ledger_entry in dice_tower.ledger.lookup_last(hist):
+            print(ledger_entry.time_stamp, ledger_entry.result, hist)
+            if ledger_entry.result > ac:
+                hits +=1
+            else:
+                misses +=1    
+        if misses < 1:
+            hit_rate = 100
         else:
-            misses +=1    
-    if misses < 1:
-        hit_rate = 100
-    else:
-        print(hits,misses)
-        hit_rate = 100*hits//misses
+            hit_rate = round((100*hits/(hits+misses)),1)
 
-    print(hit_rate)
     # display the current roll results
     gui_obj.result.setText(str(roll))
     gui_obj.hit_chance.setText(str(hit_rate))
@@ -154,7 +153,7 @@ def run_sim(gui_obj):
 
     # build report
 
-    roll_tally = roll_tally[1:]
+    # roll_tally = roll_tally[1:]
     roll_tally_ratios = [round((roll_tally[i]/int(sim_count))*100,1) for i in range(max_roll-1)]
     print("How hard did you hit:")
     print(roll_tally)
@@ -172,7 +171,8 @@ def run_sim(gui_obj):
                     'hit_tally_ratios':hit_tally_ratios}
 
     # display
-    gui_obj.result.setText("Done!")
+    gui_obj.result.setText("D")
+    gui_obj.hit_chance.setText("one!")
     build_report_table(table_data, f"Results for {sim_count} itterations of {formula} VS an ArmorClass [{ac}]")
         
 def build_report_table(table_data:dict, report_title:str="Results of simulation:"):
@@ -188,8 +188,10 @@ def build_report_table(table_data:dict, report_title:str="Results of simulation:
     gui_report.report_title.setText(report_title)
     ReportWindow.setWindowTitle("Chipy's 5E Dice Sim Report")
 
+    gui_report.report_table.setRowCount(1)
+    gui_report.report_table.setColumnCount(1)
     gui_report.report_table.setRowCount(len(table_data))
-    gui_report.report_table.setColumnCount(largest_row)
+    gui_report.report_table.setColumnCount(largest_row)    
 
     # gui_report.report_table.setHorizontalHeaderLabels(("a","aa"))
     # gui_report.report_table.setItem(0,0,QtWidgets.QTableWidgetItem("test"))
@@ -197,6 +199,7 @@ def build_report_table(table_data:dict, report_title:str="Results of simulation:
 
     r=0
     for name, list in table_data.items():
+        # column title is the 'name'
         gui_report.report_table.setRowHeight(r,10)
         for c in range(len(list)):
             gui_report.report_table.setItem(r,c,QtWidgets.QTableWidgetItem(str(list[c])))
@@ -207,7 +210,7 @@ def build_report_table(table_data:dict, report_title:str="Results of simulation:
     ReportWindow.show()
 
 if __name__ == "__main__":
-    import sys
+    # import sys
     import ctypes
 
     # required for Windows to recognize a Python script as it's own applications and thus have a unique Taskbar Icon
