@@ -1,10 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from PyQt5.QtGui import QBrush
+import matplotlib
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex
 import QT.gui
 import QT.gui_report
 import sys
 import dice
-
 
 # define globals
 formula_log = [""]
@@ -17,7 +17,74 @@ app = None
 gui_main = None
 MainWindow = None
 gui_report = None
-ReportWindow = None
+WidgetWindow = None
+
+class ReportModel(QAbstractTableModel):
+    """Class to expand the generic QAbstractTableModle to allow me to modify how a set 
+    data is stored and used for display within the PYQT5 construct system
+    """
+    def __init__(self, data) -> None:
+        super(ReportModel, self).__init__()
+        self._data = data
+
+    def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
+        return len(self._data)
+    
+    def columnCount(self, parent=QModelIndex()):
+        return len(max(self._data, key=len))
+
+    def data(self, index, role):
+        """Method that PYQT5 calls when it's trying to get the data that to display
+        """
+		# display data 
+        if role == Qt.DisplayRole:
+            # print('Display role:', index.row(), index.column(), f"Data: [{ self._data[index.row()][index.column()]}")
+            try:
+                return self._data[index.row()][index.column()]
+            except IndexError:
+                return ''
+        # background coloring
+        if role == QtCore.Qt.BackgroundColorRole:
+            # if index.row() == 3 or index.row() == 4:
+            try:
+                # cell_value = self._data[index.row()][index.column()]
+                cell_value = self._data[3][index.column()]
+            except IndexError:
+                cell_value = 0.1
+            #if something something function check range
+            return self.color_in_scale(cell_value)      
+
+    def color_in_scale(self,val:float=0):
+        threshold_orange  = 0.5
+        threshold_red = 0.3
+        multi_red = 1
+        multi_orange = 1
+        multi_green = 1
+
+        # rescale raw value into %
+        if val > 1:
+            val = val/100
+
+        # base case red and work the way up
+        if val < red:
+            hex_color = matplotlib.colors.rgb2hex((1, 0, 0))
+        if val >= red:
+            hex_color = matplotlib.colors.rgb2hex((1, 1, 0))
+        if val >= orange:
+            hex_color = matplotlib.colors.rgb2hex((0, 1, 0))
+
+        # return one of the colors
+        return QtGui.QBrush(QtGui.QColor(hex_color))  
+        
+
+class ReportWindow(QT.gui_report.Ui_Form):
+    def __init__(self):
+        super().__init__()
+
+    def load_table(self, data):
+        self.model = ReportModel(data)
+        self.report_table.setModel(self.model)
+
 
 def apply_ui_connections():
     """Overlay that connects up the GUI so that we can modularly replace the gui.py from QT5
@@ -165,49 +232,73 @@ def run_sim(gui_obj):
     print(hit_tally)
     print(hit_tally_ratios)    
 
-    table_data = {  'roll_tally':roll_tally,
-                    'roll_tally_ratios':roll_tally_ratios,
-                    'hit_tally':hit_tally,
-                    'hit_tally_ratios':hit_tally_ratios}
+    table_data = [  roll_tally,
+                    roll_tally_ratios,
+                    hit_tally,
+                    hit_tally_ratios]
 
     # display
     gui_obj.result.setText("D")
     gui_obj.hit_chance.setText("one!")
     build_report_table(table_data, f"Results for {sim_count} itterations of {formula} VS an ArmorClass [{ac}]")
         
-def build_report_table(table_data:dict, report_title:str="Results of simulation:"):
-    global gui_report, ReportWindow
+def build_report_table(table_data, report_title:str="Results of simulation:"):
+    global gui_report, WidgetWindow
 
-    largest_row = 0
-    for name, set in table_data.items():
-        print(len(set))
-        print(set)
-        if len(set) > largest_row:
-            largest_row = len(set)
-
+    # build report GUI
+    WidgetWindow.show()
+    gui_report.load_table(table_data)
+    
+    # set title
     gui_report.report_title.setText(report_title)
-    ReportWindow.setWindowTitle("Chipy's 5E Dice Sim Report")
+    WidgetWindow.setWindowTitle("Chipy's 5E Dice Sim Report")
 
-    gui_report.report_table.setRowCount(1)
-    gui_report.report_table.setColumnCount(1)
-    gui_report.report_table.setRowCount(len(table_data))
-    gui_report.report_table.setColumnCount(largest_row)    
-
-    # gui_report.report_table.setHorizontalHeaderLabels(("a","aa"))
-    # gui_report.report_table.setItem(0,0,QtWidgets.QTableWidgetItem("test"))
-    gui_report.report_table.setVerticalHeaderLabels(("roll","roll","hit","hit"))
-
+    # Resize:
     r=0
-    for name, list in table_data.items():
+    for list in table_data:
         # column title is the 'name'
         gui_report.report_table.setRowHeight(r,10)
         for c in range(len(list)):
-            gui_report.report_table.setItem(r,c,QtWidgets.QTableWidgetItem(str(list[c])))
             gui_report.report_table.setColumnWidth(c,33)
-            
         r+=1
 
-    ReportWindow.show()
+
+    # Set Lables
+    # gui_report.report_table.setVerticalHeaderLabels(("roll","roll","hit","hit"))
+
+    # largest_row = 0
+    # for name, set in table_data.items():
+    #     print(len(set))
+    #     print(set)
+    #     if len(set) > largest_row:
+    #         largest_row = len(set)
+
+    # gui_report.report_title.setText(report_title)
+    # ReportWindow.setWindowTitle("Chipy's 5E Dice Sim Report")
+
+    # gui_report.report_table.setRowCount(1)
+    # gui_report.report_table.setColumnCount(1)
+    # gui_report.report_table.setRowCount(len(table_data))
+    # gui_report.report_table.setColumnCount(largest_row)    
+
+    # # gui_report.report_table.setHorizontalHeaderLabels(("a","aa"))
+    # # gui_report.report_table.setItem(0,0,QtWidgets.QTableWidgetItem("test"))
+    # gui_report.report_table.setVerticalHeaderLabels(("roll","roll","hit","hit"))
+
+    # r=0
+    # for name, list in table_data.items():
+    #     # column title is the 'name'
+    #     gui_report.report_table.setRowHeight(r,10)
+    #     for c in range(len(list)):
+    #         gui_report.report_table.setItem(r,c,QtWidgets.QTableWidgetItem(str(list[c])))
+    #         gui_report.report_table.setColumnWidth(c,33)
+            
+    #     r+=1
+
+    
+
+
+    
 
 if __name__ == "__main__":
     # import sys
@@ -221,14 +312,15 @@ if __name__ == "__main__":
     # build main GUI
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    gui_main = QT.gui.Ui_MainWindow()
-    gui_main.setupUi(MainWindow)
     MainWindow.show()
 
-    # build report GUI
-    ReportWindow = QtWidgets.QWidget()
-    gui_report = QT.gui_report.Ui_Form()
-    gui_report.setupUi(ReportWindow)
+    gui_main = QT.gui.Ui_MainWindow()
+    gui_main.setupUi(MainWindow)
+
+    # Build Report window
+    WidgetWindow = QtWidgets.QWidget()
+    gui_report = ReportWindow()
+    gui_report.setupUi(WidgetWindow)
 
     # Modify the gui with connections and links
     apply_ui_connections()  # here we modify actions to the GUI

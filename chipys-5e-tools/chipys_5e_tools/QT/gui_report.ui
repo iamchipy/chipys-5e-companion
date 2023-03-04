@@ -6,29 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1035</width>
-    <height>184</height>
+    <width>1125</width>
+    <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTableWidget" name="report_table">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>50</y>
-     <width>1031</width>
-     <height>131</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="report_title">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>1021</width>
+     <width>1101</width>
      <height>41</height>
     </rect>
    </property>
@@ -42,6 +32,16 @@
    </property>
    <property name="text">
     <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="report_table">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>50</y>
+     <width>1111</width>
+     <height>141</height>
+    </rect>
    </property>
   </widget>
  </widget>

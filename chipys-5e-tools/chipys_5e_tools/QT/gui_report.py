@@ -14,14 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(1035, 184)
-        self.report_table = QtWidgets.QTableWidget(Form)
-        self.report_table.setGeometry(QtCore.QRect(0, 50, 1031, 131))
-        self.report_table.setObjectName("report_table")
-        self.report_table.setColumnCount(0)
-        self.report_table.setRowCount(0)
+        Form.resize(1125, 194)
         self.report_title = QtWidgets.QLabel(Form)
-        self.report_title.setGeometry(QtCore.QRect(10, 0, 1021, 41))
+        self.report_title.setGeometry(QtCore.QRect(10, 0, 1101, 41))
         font = QtGui.QFont()
         font.setFamily("Yu Gothic UI Semibold")
         font.setPointSize(28)
@@ -29,6 +24,9 @@ class Ui_Form(object):
         font.setWeight(75)
         self.report_title.setFont(font)
         self.report_title.setObjectName("report_title")
+        self.report_table = QtWidgets.QTableView(Form)
+        self.report_table.setGeometry(QtCore.QRect(5, 50, 1111, 141))
+        self.report_table.setObjectName("report_table")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
